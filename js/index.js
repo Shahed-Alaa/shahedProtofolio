@@ -7,7 +7,7 @@ const filterButtons = document.querySelectorAll('.portfolio-filter');
 // كل الكاردات
 const portfolioItems = document.querySelectorAll('.portfolio-item');
 
-//active navbar
+//*******************active navbar
 document.addEventListener('scroll' , function(){
     let currentSection = "";
 
@@ -52,7 +52,54 @@ document.addEventListener('scroll' , function(){
     }
 });
 
-// nav and tabs
+
+//********************light and dark mood
+
+var toggleBtn = document.getElementById("theme-toggle-button");
+var html = document.documentElement;
+
+// ✅ الافتراضي Dark
+html.classList.add("dark");
+toggleBtn.setAttribute("aria-pressed", "true");
+
+// لو في اختيار مخزّن
+var savedTheme = localStorage.getItem("theme");
+if (savedTheme === "light") {
+  html.classList.remove("dark");
+  toggleBtn.setAttribute("aria-pressed", "false");
+}
+
+// عند الضغط على الزر
+toggleBtn.addEventListener("click", function () {
+  var isDark = html.classList.contains("dark");
+
+  if (isDark) {
+    html.classList.remove("dark");
+    localStorage.setItem("theme", "light");
+    toggleBtn.setAttribute("aria-pressed", "false");
+  } else {
+    html.classList.add("dark");
+    localStorage.setItem("theme", "dark");
+    toggleBtn.setAttribute("aria-pressed", "true");
+  }
+});
+
+
+//*******************nav responsive
+const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+const mobileMenu = document.querySelector('.nav-links');
+
+mobileMenuBtn.addEventListener('click', (e) => {
+  mobileMenu.classList.toggle('open'); // فتح/إغلاق القائمة
+  e.stopPropagation();
+});
+
+document.body.addEventListener('click' , function(){
+  mobileMenu.classList.remove('open')
+})
+
+
+//********************nav and tabs
 filterButtonsClick();
 
 function filterButtonsClick(){       
@@ -85,7 +132,7 @@ function filterButtonsClick(){
 }
 
 
-//top btn
+//***********************top btn
 
 var scrollBtn = document.getElementById("scroll-to-top");
 // تخزين اخر مكان للسكرول
@@ -132,7 +179,6 @@ scrollBtn.addEventListener("click", function () {
   });
 });
 
-// ================= helpers =================
 function showBtn() {
   scrollBtn.classList.remove("opacity-0", "invisible");
   scrollBtn.classList.add("opacity-100", "visible");
@@ -143,39 +189,9 @@ function hideBtn() {
   scrollBtn.classList.remove("opacity-100", "visible");
 }
 
-// light and dark mood
-
-var toggleBtn = document.getElementById("theme-toggle-button");
-var html = document.documentElement;
-
-// ✅ الافتراضي Dark
-html.classList.add("dark");
-toggleBtn.setAttribute("aria-pressed", "true");
-
-// لو في اختيار مخزّن
-var savedTheme = localStorage.getItem("theme");
-if (savedTheme === "light") {
-  html.classList.remove("dark");
-  toggleBtn.setAttribute("aria-pressed", "false");
-}
-
-// عند الضغط على الزر
-toggleBtn.addEventListener("click", function () {
-  var isDark = html.classList.contains("dark");
-
-  if (isDark) {
-    html.classList.remove("dark");
-    localStorage.setItem("theme", "light");
-    toggleBtn.setAttribute("aria-pressed", "false");
-  } else {
-    html.classList.add("dark");
-    localStorage.setItem("theme", "dark");
-    toggleBtn.setAttribute("aria-pressed", "true");
-  }
-});
 
 
-//SETTINGS SIDEBAR
+//*************************SETTINGS SIDEBAR
 
 var settingsBtn = document.getElementById("settings-toggle");
 var settingsSidebar = document.getElementById("settings-sidebar");
@@ -205,7 +221,7 @@ function closeSidebar() {
 }
 
 
-// FONT & COLOR SETTINGS (FULL - WORKING)
+// *****************FONT & COLOR SETTINGS (FULL - WORKING)
 var fontButtons = document.getElementsByClassName("font-option");
 var colorsGrid = document.getElementById("theme-colors-grid");
 var resetBtn = document.getElementById("reset-settings");
@@ -222,7 +238,7 @@ var ORIGINAL_THEME = {
   accent: "#7c6cff",
 };
 
-/* ========= THEMES ========= */
+//THEMES
 var themes = [
   ORIGINAL_THEME,
   {
@@ -259,7 +275,7 @@ var themes = [
   },
 ];
 
-/* ========= CREATE COLOR BUTTONS ========= */
+//CREATE COLOR BUTTONS 
 colorsGrid.innerHTML = "";
 
 for (var i = 0; i < themes.length; i++) {
@@ -271,7 +287,7 @@ for (var i = 0; i < themes.length; i++) {
   colorsGrid.appendChild(btn);
 }
 
-/* ========= APPLY THEME ========= */
+//APPLY THEME 
 function applyTheme(theme) {
   var root = document.documentElement;
   root.style.setProperty("--color-primary", theme.primary);
@@ -282,7 +298,7 @@ function applyTheme(theme) {
   root.style.setProperty("--color-accent", theme.accent);
 }
 
-/* ========= SYNC ACTIVE COLOR ========= */
+//SYNC ACTIVE COLOR
 function syncActiveTheme(index) {
   var buttons = document.getElementsByClassName("theme-color");
 
@@ -293,7 +309,7 @@ function syncActiveTheme(index) {
   buttons[index].classList.add("ring-4", "ring-[var(--color-primary)]");
 }
 
-/* ========= COLOR CLICK ========= */
+//COLOR CLICK
 var colorButtons = document.getElementsByClassName("theme-color");
 
 for (var i = 0; i < colorButtons.length; i++) {
@@ -306,7 +322,7 @@ for (var i = 0; i < colorButtons.length; i++) {
   })(i);
 }
 
-/* ========= FONT ========= */
+//FONT
 function applyFont(font) {
   document.body.classList.remove(
     "font-tajawal",
@@ -330,7 +346,7 @@ for (var i = 0; i < fontButtons.length; i++) {
   });
 }
 
-/* ========= INIT ========= */
+//INIT 
 var savedFont = localStorage.getItem("siteFont") || DEFAULT_FONT;
 var savedThemeIndex = parseInt(localStorage.getItem("siteTheme"), 10);
 
@@ -340,7 +356,7 @@ applyFont(savedFont);
 applyTheme(themes[savedThemeIndex]);
 syncActiveTheme(savedThemeIndex);
 
-/* ========= RESET ========= */
+// RESET
 resetBtn.addEventListener("click", function () {
   applyFont(DEFAULT_FONT);
   applyTheme(ORIGINAL_THEME);
@@ -351,7 +367,7 @@ resetBtn.addEventListener("click", function () {
 });
 
 
-//CUSTOM SELECT (NO forEach)
+//**********CUSTOM SELECT  Form
 
 var wrappers = document.getElementsByClassName("custom-select-wrapper");
 
@@ -400,7 +416,7 @@ document.addEventListener("click", function () {
 });
 
 
-//CONTACT FORM VALIDATION (ON SUBMIT)
+//****************CONTACT FORM VALIDATION (ON SUBMIT)
 
 const contactForm = document.getElementById("contact-form");
 
@@ -581,3 +597,58 @@ document.addEventListener("keydown", function (e) {
   }
 });
 
+
+//**********Carusal
+
+const testimonialsCarousel = document.getElementById('testimonials-carousel');
+const testimonialCards = document.getElementsByClassName('testimonial-card');
+const nextBtn = document.getElementById('next-testimonial');
+const prevBtn = document.getElementById('prev-testimonial');
+
+const cardWidth = testimonialCards[0].offsetWidth;
+
+const maxIndex = testimonialCards.length - 3;
+
+let currentIndex = 0;
+
+function updateCarousel() {
+  testimonialsCarousel.style.transform = `translateX(${currentIndex * cardWidth}px)`;
+}
+
+nextBtn.addEventListener('click', () => {
+  if (currentIndex < maxIndex) {
+    currentIndex++;
+  } else {
+    currentIndex = 0; 
+  }
+  updateCarousel();
+});
+
+prevBtn.addEventListener('click', () => {
+  if (currentIndex > 0) {
+    currentIndex--;
+  } else {
+    currentIndex = maxIndex;  
+  }
+  updateCarousel();
+});
+
+const indicators = document.querySelectorAll('.carousel-indicator');
+
+  indicators.forEach((indicator, index) => {
+    if (index === currentIndex) {
+      indicator.classList.add('bg-accent', 'scale-125');
+      indicator.classList.remove('bg-slate-400');
+    
+    } else {
+      indicator.classList.remove('bg-accent', 'scale-125');
+      indicator.classList.add('bg-slate-400');
+    
+    }
+  });
+
+indicators.forEach(indicator => {
+  indicator.addEventListener('click', () => {
+    currentIndex = Number(indicator.dataset.index);
+    updateCarousel();
+  });});
