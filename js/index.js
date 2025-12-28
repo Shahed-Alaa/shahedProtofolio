@@ -428,7 +428,6 @@ const detailsInput = document.getElementById("project-details");
 // error spans
 const errName = document.getElementById("err-name");
 const errEmail = document.getElementById("err-email");
-const errEmailFormat = document.getElementById("err-email-format");
 const errPhone = document.getElementById("err-phone");
 const errDetails = document.getElementById("err-details");
 
@@ -491,11 +490,6 @@ function validateContactForm() {
   // الإيميل
   if (!emailVal) {
     show(errEmail);
-    setInvalid(emailInput, true);
-    ok = false;
-  } else if (!isValidEmail(emailVal)) {
-    hide(errEmail);
-    show(errEmailFormat);
     setInvalid(emailInput, true);
     ok = false;
   } else {
