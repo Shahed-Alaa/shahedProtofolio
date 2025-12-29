@@ -464,10 +464,11 @@ function isValidPhone(phone) {
 }
 
 function validateContactForm() {
+  console.log("VALIDATION RUNNING");
   // اخفاء كل الرسائل أولاً
   hide(errName);
   hide(errEmail);
-  hide(errEmailFormat);
+
   hide(errPhone);
   hide(errDetails);
 
@@ -488,13 +489,14 @@ function validateContactForm() {
   }
 
   // الإيميل
-  if (!emailVal) {
-    show(errEmail);
-    setInvalid(emailInput, true);
-    ok = false;
-  } else {
-    setInvalid(emailInput, false);
-  }
+if (!emailVal) {
+  show(errEmail);
+  setInvalid(emailInput, true);
+  ok = false;
+}else {
+  setInvalid(emailInput, false);
+}
+
 
   // الهاتف
   if (!phoneVal || !isValidPhone(phoneVal)) {
@@ -519,21 +521,29 @@ function validateContactForm() {
 
 if (contactForm) {
   contactForm.addEventListener("submit", function (e) {
-    const ok = validateContactForm();
-    if (!ok) {
-      e.preventDefault();
+    e.preventDefault(); // نمنع الإرسال دائمًا
 
-      // يطلع المستخدم لأول خطأ
+    const ok = validateContactForm();
+
+    // ❌ لو في أخطاء → أظهرها واطلع
+    if (!ok) {
       const firstInvalid =
         contactForm.querySelector(".border-red-500") ||
         contactForm.querySelector(".error-msg:not(.hidden)");
+
       if (firstInvalid) {
         firstInvalid.scrollIntoView({
           behavior: "smooth",
           block: "center",
         });
       }
+      return;
     }
+
+    // ✅ لو كلشي صح
+    successModal.classList.remove("hidden");
+    document.body.classList.add("overflow-hidden");
+    contactForm.reset();
   });
 }
 
@@ -558,8 +568,19 @@ if (contactForm2) {
 
     // تفريغ الفورم
     contactForm2.reset();
+
+   clearFormErrors();
   });
 }
+
+if (closeSuccessBtn) {
+  closeSuccessBtn.addEventListener("click", function () {
+    successModal.classList.add("hidden");
+    document.body.classList.remove("overflow-hidden");
+    clearFormErrors(); // ضمان إضافي
+  });
+}
+
 
 // زر الإغلاق
 if (closeSuccessBtn) {
@@ -590,6 +611,23 @@ document.addEventListener("keydown", function (e) {
     document.body.classList.remove("overflow-hidden");
   }
 });
+
+
+function clearFormErrors() {
+  // اخفاء كل رسائل الخطأ
+  document.querySelectorAll(".error-msg").forEach(err => {
+    err.classList.add("hidden");
+  });
+
+  // إزالة الحدود الحمراء من كل الحقول
+  document.querySelectorAll(
+    "#contact-form input, #contact-form textarea"
+  ).forEach(input => {
+    input.classList.remove("border-red-500");
+    input.classList.add("border-slate-300", "dark:border-slate-600");
+  });
+}
+
 
 
 //**********Carusal
